@@ -28,10 +28,21 @@ from . import port
 from . import ppp
 import math
 
+
 import sys,ctypes
-libc=ctypes.cdll.LoadLibrary('libc.so.6')
-popcount=lambda n:libc.__sched_cpucount(
-    ctypes.sizeof(ctypes.c_long),(ctypes.c_long*1)(n))
+if sys.version_info[0]>=3:
+    raw_input=input
+    xrange=range
+if sys.platform.startswith('linux'):
+    libc=ctypes.cdll.LoadLibrary('libc.so.6')
+    popcount=lambda n:libc.__sched_cpucount(ctypes.sizeof(ctypes.c_long),(ctypes.c_long*1)(n))
+elif sys.platform=='darwin':
+    libc=ctypes.cdll.LoadLibrary('libSystem.dylib')
+    popcount=lambda n:libc.__popcountdi2(n)
+else:
+    popcount=lambda n:0 if n==0 else popcount(n/2)+n%2
+
+
 
 class Vnf:
     _nfvi = ''
