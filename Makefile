@@ -30,7 +30,7 @@ def:
 
 install:
 	./setup.py install
-	cp misc/ssnctl /usr/local/bin
+	cp ssnctl /usr/local/bin
 
 uninstall:
 	./setup.py install --record /tmp/file.txt
