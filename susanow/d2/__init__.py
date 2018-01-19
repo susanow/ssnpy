@@ -24,7 +24,7 @@
 
 
 import susanow
-
+numa_aware=False
 
 def d2deploy(vnf, nfvi):
     block_coremasks = _get_nxt_d2out_coremasks(vnf, nfvi)
@@ -121,8 +121,11 @@ def _get_vnf_ava_cores(vnf, nfvi, bid):
     for core in cores:
         b = vnf.block(bid)
         sa = b.socket_affinity()
-        if (core['socket_id'] == sa): array.append(1)
-        else: array.append(0)
+        if (numa_aware):
+            if (core['socket_id'] == sa): array.append(1)
+            else: array.append(0)
+        else:
+            array.append(1)
     return array
 
 
