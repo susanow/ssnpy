@@ -27,6 +27,8 @@ import susanow
 numa_aware=False
 
 def d2deploy(vnf, nfvi):
+    vnf.sync()
+    nfvi.sync()
     block_coremasks = _get_nxt_d2out_coremasks(vnf, nfvi)
     vnf.reset()
     for bid in range(vnf.n_block()):
@@ -37,6 +39,8 @@ def d2deploy(vnf, nfvi):
 
 
 def d2out(vnf, nfvi):
+    vnf.sync()
+    nfvi.sync()
     block_coremasks = _get_nxt_d2out_coremasks(vnf, nfvi)
     vnf.undeploy()
     vnf.reset()
@@ -48,6 +52,8 @@ def d2out(vnf, nfvi):
 
 
 def d2in(vnf, nfvi):
+    vnf.sync()
+    nfvi.sync()
     block_coremasks = _get_nxt_d2in_coremasks(vnf, nfvi)
     vnf.undeploy()
     vnf.reset()
@@ -59,6 +65,8 @@ def d2in(vnf, nfvi):
 
 
 def d2check(vnf, nfvi):
+    vnf.sync()
+    nfvi.sync()
     curr = []
     for bid in range(vnf.n_block()):
         curr.append(vnf.block(bid).coremask())
@@ -102,6 +110,8 @@ def _mask2array32(mask):
 
 
 def _get_sys_ava_cores(vnf, nfvi):
+    vnf.sync()
+    nfvi.sync()
     cores = nfvi.get_cores()
     sys_ava = []
     for core in cores:
@@ -116,6 +126,8 @@ def _get_sys_ava_cores(vnf, nfvi):
 
 
 def _get_vnf_ava_cores(vnf, nfvi, bid):
+    vnf.sync()
+    nfvi.sync()
     cores = nfvi.get_cores()
     array = []
     for core in cores:
@@ -130,6 +142,8 @@ def _get_vnf_ava_cores(vnf, nfvi, bid):
 
 
 def _get_block_ava_cores(vnf, nfvi, bid):
+    vnf.sync()
+    nfvi.sync()
     sys_ava = _get_sys_ava_cores(vnf, nfvi)
     vnf_cur = _mask2array32(vnf.block(bid).coremask())
     vnf_ava = _get_vnf_ava_cores(vnf, nfvi, bid)
@@ -141,6 +155,8 @@ def _get_block_ava_cores(vnf, nfvi, bid):
 
 
 def _get_nxt_coremask_ncore(vnf, nfvi, n_cores):
+    vnf.sync()
+    nfvi.sync()
     sys_ava = _get_sys_ava_cores(vnf, nfvi)
     block_ava = []
     for i in range(vnf.n_block()):
@@ -175,6 +191,8 @@ def _get_nxt_coremask_ncore(vnf, nfvi, n_cores):
 
 
 def _get_nxt_d2out_coremasks(vnf, nfvi):
+    vnf.sync()
+    nfvi.sync()
     cur_coremask = vnf.block(0).coremask()
     cur_n_core = _popcnt(cur_coremask)
     nxt_n_core = 1 if (cur_n_core==0) else cur_n_core*2
@@ -185,6 +203,8 @@ def _get_nxt_d2out_coremasks(vnf, nfvi):
 
 
 def _get_nxt_d2in_coremasks(vnf, nfvi):
+    vnf.sync()
+    nfvi.sync()
     cur_coremask = vnf.block(0).coremask()
     cur_n_core = _popcnt(cur_coremask)
     nxt_n_core = 1 if (cur_n_core==1) else cur_n_core/2

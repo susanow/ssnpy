@@ -67,6 +67,7 @@ class Vnf:
     def n_port  (self): return math.floor(self._this['n_port'  ])
     def n_block (self): return math.floor(self._this['n_block' ])
     def perfred (self): return self._this['perfred' ]
+    def tpr     (self): return math.floor(self.perfred()*100)
     def rxrate  (self): return math.floor(self._this['rxrate'  ])
 
     def n_core  (self):
@@ -98,6 +99,16 @@ class Vnf:
             block = self.block(bid)
             blocks.append(block)
         return blocks
+
+    def summary(self):
+        n = self.name()
+        p = self.n_port()
+        b = self.n_block()
+        r = self.running()
+        m = self.coremask()
+        c = self.n_core()
+        print('n={} p={} b={} running={} mask={}({}core)'.
+                format(n, p, b, r, m, c))
 
     def show(self):
         self.sync()
