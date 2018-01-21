@@ -103,8 +103,9 @@ def vnf_list(nfvi):
         p = vnf.n_port()
         b = vnf.n_block()
         r = vnf.running()
-        c = vnf.coremask()
-        print('[{}] n={} p={} b={} r={} c={}'.format(idx, n, p, b, r, c))
+        m = vnf.coremask()
+        c = vnf.n_core()
+        print('[{}] n={} p={} b={} running={} mask={}({}core)'.format(idx, n, p, b, r, m, c))
         idx = idx + 1
 
 def vnf_NAME_stat(vnfname, nfvi):
