@@ -24,7 +24,7 @@
 
 
 import susanow
-numa_aware=False
+numa_aware=True
 
 def d2deploy(vnf, nfvi):
     vnf.sync()
@@ -98,7 +98,7 @@ def _popcnt(bitmask):
 def _mask2array32(mask):
     array = []
     pivot = 0x1
-    for i in range(16):
+    for i in range(32):
         try:
             array.append(mask & pivot)
             mask = mask >> 1
@@ -119,7 +119,7 @@ def _get_sys_ava_cores(vnf, nfvi):
        else: sys_ava.append(0)
     vnf_cur = _mask2array32(vnf.coremask())
     res = []
-    for i in range(16):
+    for i in range(32):
         n = sys_ava[i] | vnf_cur[i]
         res.append(n)
     return res
@@ -148,7 +148,7 @@ def _get_block_ava_cores(vnf, nfvi, bid):
     vnf_cur = _mask2array32(vnf.block(bid).coremask())
     vnf_ava = _get_vnf_ava_cores(vnf, nfvi, bid)
     res = []
-    for i in range(16):
+    for i in range(32):
         n = (sys_ava[i] | vnf_cur[i]) & vnf_ava[i]
         res.append(n)
     return res
@@ -166,7 +166,7 @@ def _get_nxt_coremask_ncore(vnf, nfvi, n_cores):
     blocks = vnf.blocks()
     for block in blocks:
         bid = block.bid()
-        for i in range(16):
+        for i in range(32):
             block_ava[bid][i] = block_ava[bid][i] & sys_ava[i]
 
         nxt_n_core = n_cores
@@ -174,7 +174,7 @@ def _get_nxt_coremask_ncore(vnf, nfvi, n_cores):
         enough = False
         cnt = 0
         nxt_coremask = 0
-        for i in range(16):
+        for i in range(32):
             if (block_ava[bid][i] == 1):
                 nxt_coremask = nxt_coremask + (0x1 << i)
                 block_ava[bid][i] = 0
