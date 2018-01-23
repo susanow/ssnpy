@@ -169,8 +169,9 @@ class nfvi:
             print("content: {}".format(response.content))
             exit(-1)
 
-    def __init__(self, host='localhost', port=8888):
-        self._host = host
+    def __init__(self, host='<none>', port=8888):
+        if (host == '<none>'): self._host = os.getenv('SSN_HOST', 'localhost')
+        else: self._host = host
         self._port = port
         res = self._get('/')
         self.sync()

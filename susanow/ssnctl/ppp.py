@@ -38,7 +38,7 @@ def main (argc, argv):
         usage_ppp()
         exit(-1)
 
-    nfvi = susanow.nfvi.nfvi(os.getenv('SSN_HOME', 'localhost'))
+    nfvi = susanow.nfvi.nfvi(os.getenv('SSN_HOST', 'localhost'))
     option = argv[1]
     if (option == 'list'):
         ppp_list(nfvi)
