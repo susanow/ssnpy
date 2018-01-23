@@ -95,10 +95,10 @@ def _popcnt(bitmask):
     return count
 
 
-def _mask2array32(mask):
+def _mask2array(mask, n_core):
     array = []
     pivot = 0x1
-    for i in range(32):
+    for i in range(n_core):
         try:
             array.append(mask & pivot)
             mask = mask >> 1
@@ -117,9 +117,9 @@ def _get_sys_ava_cores(vnf, nfvi):
     for core in cores:
        if (core['state'] == 'WAIT'): sys_ava.append(1)
        else: sys_ava.append(0)
-    vnf_cur = _mask2array32(vnf.coremask())
+    vnf_cur = _mask2array(vnf.coremask(), nfvi.n_core())
     res = []
-    for i in range(32):
+    for i in range(nfvi.n_core()):
         n = sys_ava[i] | vnf_cur[i]
         res.append(n)
     return res
@@ -145,10 +145,10 @@ def _get_block_ava_cores(vnf, nfvi, bid):
     vnf.sync()
     nfvi.sync()
     sys_ava = _get_sys_ava_cores(vnf, nfvi)
-    vnf_cur = _mask2array32(vnf.block(bid).coremask())
+    vnf_cur = _mask2array(vnf.block(bid).coremask(), nfvi.n_core())
     vnf_ava = _get_vnf_ava_cores(vnf, nfvi, bid)
     res = []
-    for i in range(32):
+    for i in range(nfvi.n_core()):
         n = (sys_ava[i] | vnf_cur[i]) & vnf_ava[i]
         res.append(n)
     return res
@@ -166,7 +166,7 @@ def _get_nxt_coremask_ncore(vnf, nfvi, n_cores):
     blocks = vnf.blocks()
     for block in blocks:
         bid = block.bid()
-        for i in range(32):
+        for i in range(nfvi.n_core()):
             block_ava[bid][i] = block_ava[bid][i] & sys_ava[i]
 
         nxt_n_core = n_cores
@@ -174,7 +174,7 @@ def _get_nxt_coremask_ncore(vnf, nfvi, n_cores):
         enough = False
         cnt = 0
         nxt_coremask = 0
-        for i in range(32):
+        for i in range(nfvi.n_core()):
             if (block_ava[bid][i] == 1):
                 nxt_coremask = nxt_coremask + (0x1 << i)
                 block_ava[bid][i] = 0
