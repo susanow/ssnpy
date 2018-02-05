@@ -33,6 +33,9 @@ def usage_port():
     print("  alloc  <name> pci <0000:01:00.0>  allocate new pci port ")
     print("  alloc  <name> tap <tap0>          allocate new tap port ")
     print("  alloc  <name> virt                allocate new virt port")
+    print("  alloc  <name> vhost               allocate new vhostuser port")
+    print("  alloc  <name> pipe                allocate new pipepmd port")
+    print("  alloc  <name> afpacket <eth0>     allocate new afpacket port ")
     print("  delete <name>                     delete port           ")
 
 def main(argc, argv):
@@ -69,8 +72,19 @@ def main(argc, argv):
                     ifname = argv[4]
                     port_NAME_alloc_tap(pname, ifname, nfvi)
                     return
+            elif (subop == "afpacket"):
+                if (argc >= 5):
+                    ifname = argv[4]
+                    port_NAME_alloc_afpacket(pname, ifname, nfvi)
+                    return
+            elif (subop == "pipe"):
+                port_NAME_alloc_pipe(pname, nfvi)
+                return
             elif (subop == "virt"):
                 port_NAME_alloc_virt(pname, nfvi)
+                return
+            elif (subop == "vhost"):
+                port_NAME_alloc_vhost(pname, nfvi)
                 return
     usage_port()
     exit(-1)
@@ -118,5 +132,24 @@ def port_NAME_alloc_virt(pname, nfvi):
         port = nfvi.alloc_port_virt(pname)
     except Exception as e:
         print(e)
+
+def port_NAME_alloc_pipe(pname, nfvi):
+    try:
+        port = nfvi.alloc_port_pipe(pname)
+    except Exception as e:
+        print(e)
+
+def port_NAME_alloc_vhost(pname, nfvi):
+    try:
+        port = nfvi.alloc_port_vhost(pname)
+    except Exception as e:
+        print(e)
+
+def port_NAME_alloc_afpacket(pname, ifname, nfvi):
+    try:
+        port = nfvi.alloc_port_afpacket(pname, ifname)
+    except Exception as e:
+        print(e)
+
 
 

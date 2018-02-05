@@ -252,11 +252,26 @@ class nfvi:
             raise Exception('Miss: {}'.format(msg))
         return self.get_port(iname)
 
+    def alloc_port_vhost(self, iname):
+        data  = '{\n'
+        data += '  \"cname\" : \"vhost\"\n'
+        data += '}\n'
+        return self.alloc_port(iname, data)
+
     def alloc_port_pci(self, iname, pciaddr):
         data  = '{\n'
         data += '  \"cname\" : \"pci\",\n'
         data += '  \"options\" : {\n'
         data += '     \"pciaddr\" : \"{}\"\n'.format(pciaddr)
+        data += '  }\n'
+        data += '}\n'
+        return self.alloc_port(iname, data)
+
+    def alloc_port_afpacket(self, iname, ifname):
+        data  = '{\n'
+        data += '  \"cname\" : \"afpacket\",\n'
+        data += '  \"options\" : {\n'
+        data += '     \"ifname\" : \"{}\"\n'.format(ifname)
         data += '  }\n'
         data += '}\n'
         return self.alloc_port(iname, data)
@@ -273,6 +288,12 @@ class nfvi:
     def alloc_port_virt(self, iname):
         data  = '{\n'
         data += '  \"cname\" : \"virt\"\n'
+        data += '}\n'
+        return self.alloc_port(iname, data)
+
+    def alloc_port_pipe(self, iname):
+        data  = '{\n'
+        data += '  \"cname\" : \"pipe\"\n'
         data += '}\n'
         return self.alloc_port(iname, data)
 
