@@ -22,7 +22,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
+import math
 from . import nfvi
 from . import vnf
 from . import ppp
@@ -46,15 +46,15 @@ class Port:
             raise Exception('port not found {}'.format(self._name))
 
     def name (self)    : return self._name
-    def n_rxq(self)    : return self._this['n_rxq']
-    def n_txq(self)    : return self._this['n_txq']
-    def n_rxa(self)    : return self._this['n_rxa']
-    def n_txa(self)    : return self._this['n_txa']
-    def outer_rxp(self): return self._this['outer_rxp']
-    def outer_txp(self): return self._this['outer_txp']
-    def inner_rxp(self): return self._this['inner_rxp']
-    def inner_txp(self): return self._this['inner_txp']
-    def socket_id(self): return self._this['socket_id']
+    def n_rxq(self)    : return math.floor(self._this['n_rxq'])
+    def n_txq(self)    : return math.floor(self._this['n_txq'])
+    def n_rxa(self)    : return math.floor(self._this['n_rxa'])
+    def n_txa(self)    : return math.floor(self._this['n_txa'])
+    def outer_rxp(self): return math.floor(self._this['outer_rxp'])
+    def outer_txp(self): return math.floor(self._this['outer_txp'])
+    def inner_rxp(self): return math.floor(self._this['inner_rxp'])
+    def inner_txp(self): return math.floor(self._this['inner_txp'])
+    def socket_id(self): return math.floor(self._this['socket_id'])
 
     def attach(self):
         ret = self._this['attach']
